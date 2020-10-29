@@ -26,10 +26,15 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class IndexController {
 
+    /**
+     *
+     * @param request 封装 HTTP 请求消息
+     * @return
+     */
 	@GetMapping(value = {"", "/"})
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-
+		// 获取请求的消息保存在user对象中
 		User user = (User) request.getSession().getAttribute("user");
 		if (ObjectUtil.isNull(user)) {
 			mv.setViewName("redirect:/user/login");

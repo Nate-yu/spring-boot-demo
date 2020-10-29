@@ -27,13 +27,24 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
+
+    /**
+     *
+     * 登录
+     * @param user
+     * @param request
+     * @return
+     */
 	@PostMapping("/login")
 	public ModelAndView login(User user, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 
+        // 添加对象使用的参数名称生成模型
 		mv.addObject(user);
+        // 此为ModelAndView的设置视图名称，由通过一个ViewResolverDispatcherServlet会得到解决
 		mv.setViewName("redirect:/");
 
+		// 获取请求信息，存入对象
 		request.getSession().setAttribute("user", user);
 		return mv;
 	}
