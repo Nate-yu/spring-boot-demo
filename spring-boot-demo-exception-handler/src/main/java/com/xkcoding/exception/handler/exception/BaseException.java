@@ -18,6 +18,9 @@ import lombok.EqualsAndHashCode;
  * @modified: yangkai.shen
  */
 @Data
+/**此注解(@EqualsAndHashCode)会生成equals(Object other) 和 hashCode()方法。
+ * callSuper=true: 让其生成的方法中调用父类的方法
+ * */
 @EqualsAndHashCode(callSuper = true)
 public class BaseException extends RuntimeException {
 	private Integer code;
