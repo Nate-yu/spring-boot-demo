@@ -18,8 +18,10 @@ import org.springframework.stereotype.Component;
  * @modified: yangkai.shen
  */
 @Data
+/**\@Component注解: 把普通pojo实例化到spring容器中，相当于配置文件中的<bean id="" class=""/>*/
 @Component
 public class ApplicationProperty {
+    /**将配置文件的属性读出来*/
 	@Value("${application.name}")
 	private String name;
 	@Value("${application.version}")

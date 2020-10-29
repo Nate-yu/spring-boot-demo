@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
  * @modified: yangkai.shen
  */
 @Data
+/**读取配置文件中前缀为“developer”的信息*/
 @ConfigurationProperties(prefix = "developer")
 @Component
 public class DeveloperProperty {
