@@ -27,6 +27,7 @@ import java.util.Objects;
  * @version: V1.0
  * @modified: yangkai.shen
  */
+/**\@Aspect: 把当前类标识为一个切面供容器读取*/
 @Aspect
 @Component
 @Slf4j
