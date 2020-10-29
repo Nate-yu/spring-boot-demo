@@ -5,7 +5,7 @@
   <a href="https://xkcoding.com"><img alt="author" src="https://img.shields.io/badge/author-Yangkai.Shen-blue.svg"/></a>
   <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8.0_162-orange.svg"/></a>
   <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/"><img alt="Spring Boot" src="https://img.shields.io/badge/Spring Boot-2.1.0.RELEASE-brightgreen.svg"/></a>
-  <a href="https://github.com/xkcoding/spring-boot-demo/blob/master/LICENSE"><img alt="LICENSE" src="https://img.shields.io/github/license/xkcoding/spring-boot-demo.svg"/></a>  
+  <a href="https://github.com/xkcoding/spring-boot-demo/blob/master/LICENSE"><img alt="LICENSE" src="https://img.shields.io/github/license/xkcoding/spring-boot-demo.svg"/></a>
 </p>
 
 <p align="center">
@@ -376,6 +376,3 @@ Copyright (c) 2018 Yangkai.Shen
 - `SpringBlade`：完整的线上解决方案(企业开发必备)，https://github.com/chillzhuang/SpringBlade
 - `Pig`：宇宙最强微服务认证授权脚手架(架构师必备)，https://github.com/pigxcloud/pig
 
-### 广告
-
-[![京东云主机](assets/jdcloud.jpg)](https://re.jdcloud.com/cps?returnUrl=aHR0cHM6Ly93d3cuamRjbG91ZC5jb20vY24vYWN0aXZpdHkveWVhci1lbmQ_bUlkPTE4JmNwc0tleT1iMjg2Y2Q0ZmExMWM0ODZhODU2NmUwNjc5MGQ0MzY4MA==)

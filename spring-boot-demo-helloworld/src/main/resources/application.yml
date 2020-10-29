@@ -1,4 +1,5 @@
 server:
   port: 8080
   servlet:
+    # 设置访问项目的根路径
     context-path: /demo
