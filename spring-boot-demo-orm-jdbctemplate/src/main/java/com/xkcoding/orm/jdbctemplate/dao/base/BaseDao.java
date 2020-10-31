@@ -43,10 +43,13 @@ public class BaseDao<T, P> {
 	private JdbcTemplate jdbcTemplate;
 	private Class<T> clazz;
 
+	/**\@SuppressWarnings: 告诉编译器忽略指定的警告，不用在编译完成后出现警告信息*/
 	@SuppressWarnings(value = "unchecked")
 	public BaseDao(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		// 获得超类的泛型参数的实际类型
+		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+            .getActualTypeArguments()[0];
 	}
 
 	/**
@@ -66,12 +69,16 @@ public class BaseDao<T, P> {
 		String columns = StrUtil.join(Const.SEPARATOR_COMMA, columnList);
 
 		// 构造占位符
-		String params = StrUtil.repeatAndJoin("?", columnList.size(), Const.SEPARATOR_COMMA);
+		String params = StrUtil.repeatAndJoin("?", columnList.size(),
+            Const.SEPARATOR_COMMA);
 
 		// 构造值
-		Object[] values = filterField.stream().map(field -> ReflectUtil.getFieldValue(t, field)).toArray();
+		Object[] values =
+            filterField.stream().map(field -> ReflectUtil.getFieldValue(t, field)).toArray();
 
-		String sql = StrUtil.format("INSERT INTO {table} ({columns}) VALUES ({params})", Dict.create().set("table", table).set("columns", columns).set("params", params));
+		String sql = StrUtil.format("INSERT INTO {table} ({columns}) " +
+            "VALUES ({params})", Dict.create().set("table", table).set("columns", columns)
+            .set("params", params));
 		log.debug("【执行SQL】SQL：{}", sql);
 		log.debug("【执行SQL】参数：{}", JSONUtil.toJsonStr(values));
 		return jdbcTemplate.update(sql, values);
@@ -85,7 +92,8 @@ public class BaseDao<T, P> {
 	 */
 	protected Integer deleteById(P pk) {
 		String tableName = getTableName();
-		String sql = StrUtil.format("DELETE FROM {table} where id = ?", Dict.create().set("table", tableName));
+		String sql = StrUtil.format("DELETE FROM {table} where id = ?",
+            Dict.create().set("table", tableName));
 		log.debug("【执行SQL】SQL：{}", sql);
 		log.debug("【执行SQL】参数：{}", JSONUtil.toJsonStr(pk));
 		return jdbcTemplate.update(sql, pk);
@@ -106,16 +114,19 @@ public class BaseDao<T, P> {
 
 		List<String> columnList = getColumns(filterField);
 
-		List<String> columns = columnList.stream().map(s -> StrUtil.appendIfMissing(s, " = ?")).collect(Collectors.toList());
+		List<String> columns = columnList.stream().map(s -> StrUtil
+            .appendIfMissing(s, " = ?")).collect(Collectors.toList());
 		String params = StrUtil.join(Const.SEPARATOR_COMMA, columns);
 
 		// 构造值
-		List<Object> valueList = filterField.stream().map(field -> ReflectUtil.getFieldValue(t, field)).collect(Collectors.toList());
+		List<Object> valueList = filterField.stream().map(field ->
+            ReflectUtil.getFieldValue(t, field)).collect(Collectors.toList());
 		valueList.add(pk);
 
 		Object[] values = ArrayUtil.toArray(valueList, Object.class);
 
-		String sql = StrUtil.format("UPDATE {table} SET {params} where id = ?", Dict.create().set("table", tableName).set("params", params));
+		String sql = StrUtil.format("UPDATE {table} SET {params} where id = ?",
+            Dict.create().set("table", tableName).set("params", params));
 		log.debug("【执行SQL】SQL：{}", sql);
 		log.debug("【执行SQL】参数：{}", JSONUtil.toJsonStr(values));
 		return jdbcTemplate.update(sql, values);
@@ -129,7 +140,8 @@ public class BaseDao<T, P> {
 	 */
 	public T findOneById(P pk) {
 		String tableName = getTableName();
-		String sql = StrUtil.format("SELECT * FROM {table} where id = ?", Dict.create().set("table", tableName));
+		String sql = StrUtil.format("SELECT * FROM {table} where id = ?",
+            Dict.create().set("table", tableName));
 		RowMapper<T> rowMapper = new BeanPropertyRowMapper<>(clazz);
 		log.debug("【执行SQL】SQL：{}", sql);
 		log.debug("【执行SQL】参数：{}", JSONUtil.toJsonStr(pk));
@@ -147,18 +159,23 @@ public class BaseDao<T, P> {
 		List<Field> filterField = getField(t, true);
 		List<String> columnList = getColumns(filterField);
 
-		List<String> columns = columnList.stream().map(s -> " and " + s + " = ? ").collect(Collectors.toList());
+		List<String> columns = columnList.stream().map(s -> " and " + s + " = ? ")
+            .collect(Collectors.toList());
 
 		String where = StrUtil.join(" ", columns);
 		// 构造值
-		Object[] values = filterField.stream().map(field -> ReflectUtil.getFieldValue(t, field)).toArray();
+		Object[] values = filterField.stream().map(field -> ReflectUtil
+            .getFieldValue(t, field)).toArray();
 
-		String sql = StrUtil.format("SELECT * FROM {table} where 1=1 {where}", Dict.create().set("table", tableName).set("where", StrUtil.isBlank(where) ? "" : where));
+		String sql = StrUtil.format("SELECT * FROM {table} where 1=1 {where}",
+            Dict.create().set("table", tableName).set("where", StrUtil.isBlank(where) ?
+                "" : where));
 		log.debug("【执行SQL】SQL：{}", sql);
 		log.debug("【执行SQL】参数：{}", JSONUtil.toJsonStr(values));
 		List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql, values);
 		List<T> ret = CollUtil.newArrayList();
-		maps.forEach(map -> ret.add(BeanUtil.fillBeanWithMap(map, ReflectUtil.newInstance(clazz), true, false)));
+		maps.forEach(map -> ret.add(BeanUtil.fillBeanWithMap(map,
+            ReflectUtil.newInstance(clazz), true, false)));
 		return ret;
 	}
 
@@ -226,11 +243,15 @@ public class BaseDao<T, P> {
 
 		// 过滤数据库中不存在的字段，以及自增列
 		List<Field> filterField;
-		Stream<Field> fieldStream = CollUtil.toList(fields).stream().filter(field -> ObjectUtil.isNull(field.getAnnotation(Ignore.class)) || ObjectUtil.isNull(field.getAnnotation(Pk.class)));
+		Stream<Field> fieldStream = CollUtil.toList(fields).stream()
+            .filter(field -> ObjectUtil.isNull(field.getAnnotation(Ignore.class)) ||
+                ObjectUtil.isNull(field.getAnnotation(Pk.class)));
 
 		// 是否过滤字段值为null的字段
 		if (ignoreNull) {
-			filterField = fieldStream.filter(field -> ObjectUtil.isNotNull(ReflectUtil.getFieldValue(t, field))).collect(Collectors.toList());
+			filterField = fieldStream.filter(field -> ObjectUtil
+                .isNotNull(ReflectUtil.getFieldValue(t, field)))
+                .collect(Collectors.toList());
 		} else {
 			filterField = fieldStream.collect(Collectors.toList());
 		}
